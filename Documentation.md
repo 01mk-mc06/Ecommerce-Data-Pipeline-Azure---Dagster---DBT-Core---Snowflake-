@@ -53,11 +53,11 @@ BI Tools / Analysts
 
 ### 1.3 Success Metrics
 
-- ✅ **Zero manual data loading** (Snowpipe automation)
-- ✅ **99% data quality SLA** (dbt tests catch bad data)
-- ✅ **Complete audit trail** (every transformation documented)
-- ✅ **Role-based access control** (analysts can't break engineering layer)
-- ✅ **Automated monitoring** (Dagster alerts on failures)
+- **Zero manual data loading** (Snowpipe automation)
+- **99% data quality SLA** (dbt tests catch bad data)
+- **Complete audit trail** (every transformation documented)
+- **Role-based access control** (analysts can't break engineering layer)
+- **Automated monitoring** (Dagster alerts on failures)
 
 ### 1.4 Tech Stack
 
@@ -254,7 +254,7 @@ Inside `raw-data` container:
 
 ### 3.3 Snowflake Setup
 
-See [Appendix A: Snowflake DDL Scripts](#10-appendix-a-snowflake-ddl-scripts) for full SQL code.
+See [Appendix A: Snowflake DDL Scripts] for full SQL code.
 
 #### 3.3.1 Create Snowflake Trial Account
 
@@ -339,7 +339,7 @@ SNOWFLAKE_DATABASE=ecom_analytics_db
 SNOWFLAKE_SCHEMA=ecom_staging
 ```
 
-**⚠️ IMPORTANT:** Add `.env` to `.gitignore` immediately!
+**IMPORTANT:** Add `.env` to `.gitignore` immediately!
 
 #### 3.4.4 Create dbt Profile
 
@@ -419,7 +419,7 @@ load_dotenv()
 required_vars = ['SNOWFLAKE_ACCOUNT', 'SNOWFLAKE_USER', 'SNOWFLAKE_PASSWORD']
 missing = [v for v in required_vars if not os.getenv(v)]
 if missing:
-    print(f"❌ Missing: {', '.join(missing)}")
+    print(f" Missing: {', '.join(missing)}")
     sys.exit(1)
 
 dbt_command = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else 'debug'
@@ -443,7 +443,7 @@ Usage: `python run_dbt.py run --select staging`
 
 ### 4.2 Data Generator Script
 
-See [Appendix B: Python Data Generator](#11-appendix-b-python-data-generator) for full code.
+See [Appendix B: Python Data Generator] for full code.
 
 **Data Quality Issues Injected:**
 - **Duplicate order_ids:** ~7% (105 duplicates)
@@ -467,14 +467,14 @@ python data_generator/generate_ecom_data.py
 
 **Expected Output:**
 ```
-🔄 Generating e-commerce data...
+ Generating e-commerce data...
 
-📊 Data Summary:
+ Data Summary:
   Products: 50 rows
   Customers: 300 rows
   Orders: 1500 rows
 
-⚠️  Intentional Data Quality Issues:
+  Intentional Data Quality Issues:
   Products with NULL category: 6
   Products with NULL brand: 9
   Products with NULL cost: 1
@@ -486,19 +486,19 @@ python data_generator/generate_ecom_data.py
   Duplicate order_ids: 110
   Orders with future dates: 46
 
-☁️  Uploading to Azure Blob Storage...
-✅ Uploaded products/products_20260322.csv (50 rows)
-✅ Uploaded customers/customers_20260322.csv (300 rows)
-✅ Uploaded orders/orders_20260322.csv (1500 rows)
+  Uploading to Azure Blob Storage...
+ Uploaded products/products_20260322.csv (50 rows)
+ Uploaded customers/customers_20260322.csv (300 rows)
+ Uploaded orders/orders_20260322.csv (1500 rows)
 
-✨ Data generation complete!
+ Data generation complete!
 ```
 
 ### 4.4 Trigger Snowpipe
 
 Since `AUTO_INGEST=FALSE` (manual mode for learning), trigger pipes manually.
 
-See [Appendix A: Snowflake - Trigger Snowpipe](#snowflake-trigger-snowpipe) for SQL commands.
+See [Appendix A: Snowflake - Trigger Snowpipe] for SQL commands.
 
 **Verification Query:**
 
@@ -599,7 +599,7 @@ models:
 
 ### 5.4 Source Definitions
 
-See [Appendix C: dbt - sources.yml](#dbt-sourcesyml) for full code.
+See [Appendix C: dbt - sources.yml] for full code.
 
 **Key Features:**
 - Freshness checks (warn after 24 hours, error after 48 hours)
@@ -610,15 +610,15 @@ See [Appendix C: dbt - sources.yml](#dbt-sourcesyml) for full code.
 
 #### 5.5.1 stg_orders.sql
 
-See [Appendix C: dbt - stg_orders.sql](#dbt-stg_orderssql) for full code.
+See [Appendix C: dbt - stg_orders.sql] for full code.
 
 **Transformations:**
-- ✅ Type-cast VARCHAR to proper types (TIMESTAMP, NUMBER)
-- ✅ Remove duplicates using `ROW_NUMBER()` window function
-- ✅ Filter NULL customer_id, product_id
-- ✅ Filter future dates (`order_date > CURRENT_TIMESTAMP()`)
-- ✅ Calculate `total_amount = quantity * unit_price`
-- ✅ Standardize `order_status` to lowercase
+-  Type-cast VARCHAR to proper types (TIMESTAMP, NUMBER)
+-  Remove duplicates using `ROW_NUMBER()` window function
+-  Filter NULL customer_id, product_id
+-  Filter future dates (`order_date > CURRENT_TIMESTAMP()`)
+-  Calculate `total_amount = quantity * unit_price`
+-  Standardize `order_status` to lowercase
 
 **Data Quality Impact:**
 ```
@@ -635,28 +635,26 @@ Removed:
 
 #### 5.5.2 stg_customers.sql
 
-See [Appendix C: dbt - stg_customers.sql](#dbt-stg_customerssql) for full code.
+See [Appendix C: dbt - stg_customers.sql] for full code.
 
 **Transformations:**
-- ✅ Replace NULL names with 'Unknown'
-- ✅ Replace NULL phones with 'N/A'
-- ✅ Lowercase and trim email addresses
-- ✅ Deduplicate by customer_id (keep most recent)
-- ✅ Type-cast registration_date to DATE
+-  Replace NULL names with 'Unknown'
+-  Replace NULL phones with 'N/A'
+-  Lowercase and trim email addresses
+-  Deduplicate by customer_id (keep most recent)
+-  Type-cast registration_date to DATE
 
-#### 5.5.3 stg_products.sql
-
-See [Appendix C: dbt - stg_products.sql](#dbt-stg_productssql) for full code.
+#### 5.5.3 stg_products.sql for full code.
 
 **Transformations:**
-- ✅ Replace NULL category with 'Uncategorized'
-- ✅ Replace NULL brand with 'Generic'
-- ✅ Type-cast cost and price to NUMBER
-- ✅ Calculate margin_percent: `((price - cost) / cost) * 100`
+-  Replace NULL category with 'Uncategorized'
+-  Replace NULL brand with 'Generic'
+-  Type-cast cost and price to NUMBER
+-  Calculate margin_percent: `((price - cost) / cost) * 100`
 
 ### 5.6 Schema Tests
 
-See [Appendix C: dbt - staging/schema.yml](#dbt-stagingschemayml) for full code.
+See [Appendix C: dbt - staging/schema.yml] for full code.
 
 **Tests Applied:**
 - `unique` on primary keys (order_id, customer_id, product_id)
@@ -743,7 +741,7 @@ python run_dbt.py test --fail-fast --store-failures
 
 #### 6.2.1 dim_customers
 
-See [Appendix C: dbt - dim_customers.sql](#dbt-dim_customerssql) for full code.
+See [Appendix C: dbt - dim_customers.sql] for full code.
 
 **Enrichments:**
 - Customer lifetime value (sum of delivered orders)
@@ -771,7 +769,7 @@ END as customer_status
 
 #### 6.2.2 dim_products
 
-See [Appendix C: dbt - dim_products.sql](#dbt-dim_productssql) for full code.
+See [Appendix C: dbt - dim_products.sql] for full code.
 
 **Enrichments:**
 - Total orders, quantity sold, revenue
@@ -783,7 +781,7 @@ See [Appendix C: dbt - dim_products.sql](#dbt-dim_productssql) for full code.
 
 #### 6.3.1 fct_orders
 
-See [Appendix C: dbt - fct_orders.sql](#dbt-fct_orderssql) for full code.
+See [Appendix C: dbt - fct_orders.sql] for full code.
 
 **Grain:** One row per order
 
@@ -803,7 +801,7 @@ See [Appendix C: dbt - fct_orders.sql](#dbt-fct_orderssql) for full code.
 
 ### 6.4 Marts Schema Tests
 
-See [Appendix C: dbt - marts/schema.yml](#dbt-martsschemayml) for full code.
+See [Appendix C: dbt - marts/schema.yml] for full code.
 
 **Additional Tests:**
 - Foreign key relationships (fct_orders → dim_customers, dim_products)
@@ -814,7 +812,7 @@ See [Appendix C: dbt - marts/schema.yml](#dbt-martsschemayml) for full code.
 
 #### 6.5.1 Revenue Reconciliation
 
-See [Appendix C: dbt - assert_revenue_matches.sql](#dbt-assert_revenue_matchessql) for full code.
+See [Appendix C: dbt - assert_revenue_matches.sql] for full code.
 
 **Purpose:** Ensure `fct_orders` revenue matches `stg_orders` (no data loss in transformation)
 
@@ -943,7 +941,7 @@ dagster_ecommerce/
 
 ### 7.3 Resources (Connection Managers)
 
-See [Appendix D: Dagster - Resources](#dagster-resources) for full code.
+See [Appendix D: Dagster - Resources] for full code.
 
 **Resources Created:**
 - `dbt_resource` - Configures dbt CLI with project directory
@@ -954,7 +952,7 @@ See [Appendix D: Dagster - Resources](#dagster-resources) for full code.
 
 #### 7.4.1 Azure Blob Asset
 
-See [Appendix D: Dagster - azure_assets.py](#dagster-azure_assetspy) for full code.
+See [Appendix D: Dagster - azure_assets.py] for full code.
 
 **Purpose:** Check Azure Blob for available files
 
@@ -970,7 +968,7 @@ See [Appendix D: Dagster - azure_assets.py](#dagster-azure_assetspy) for full co
 
 #### 7.4.2 Snowpipe Refresh Asset
 
-See [Appendix D: Dagster - snowpipe_assets.py](#dagster-snowpipe_assetspy) for full code.
+See [Appendix D: Dagster - snowpipe_assets.py] for full code.
 
 **Purpose:** Manually trigger Snowpipe to load new files
 
@@ -985,7 +983,7 @@ ALTER PIPE ecom_raw_db.ecom_raw_schema.pipe_products REFRESH;
 
 #### 7.4.3 dbt Assets
 
-See [Appendix D: Dagster - dbt_assets.py](#dagster-dbt_assetspy) for full code.
+See [Appendix D: Dagster - dbt_assets.py] for full code.
 
 **Purpose:** Wrap all dbt models as Dagster assets
 
@@ -997,7 +995,7 @@ See [Appendix D: Dagster - dbt_assets.py](#dagster-dbt_assetspy) for full code.
 
 #### 7.5.1 File Sensor
 
-See [Appendix D: Dagster - file_sensor.py](#dagster-file_sensorrpy) for full code.
+See [Appendix D: Dagster - file_sensor.py] for full code.
 
 **Purpose:** Wake up every 5 minutes, check if new files exist in Azure Blob
 
@@ -1011,7 +1009,7 @@ See [Appendix D: Dagster - file_sensor.py](#dagster-file_sensorrpy) for full cod
 
 #### 7.5.2 Alert Sensor
 
-See [Appendix D: Dagster - alert_sensor.py](#dagster-alert_sensorrpy) for full code.
+See [Appendix D: Dagster - alert_sensor.py] for full code.
 
 **Purpose:** Detect pipeline failures, log alerts
 
@@ -1021,7 +1019,7 @@ See [Appendix D: Dagster - alert_sensor.py](#dagster-alert_sensorrpy) for full c
 
 ### 7.6 Schedules
 
-See [Appendix D: Dagster - daily_schedule.py](#dagster-daily_schedulerpy) for full code.
+See [Appendix D: Dagster - daily_schedule.py] for full code.
 
 **Cron Expression:** `0 2 * * *` (every day at 2 AM)
 
@@ -1033,7 +1031,7 @@ See [Appendix D: Dagster - daily_schedule.py](#dagster-daily_schedulerpy) for fu
 
 ### 7.7 Jobs
 
-See [Appendix D: Dagster - daily_job.py](#dagster-daily_jobpy) for full code.
+See [Appendix D: Dagster - daily_job.py] for full code.
 
 **Jobs Defined:**
 - `all_assets_job` - Runs every asset (used by schedule)
@@ -1041,7 +1039,7 @@ See [Appendix D: Dagster - daily_job.py](#dagster-daily_jobpy) for full code.
 
 ### 7.8 Dagster Definitions
 
-See [Appendix D: Dagster - __init__.py](#dagster-__init__py) for full code.
+See [Appendix D: Dagster - __init__.py] for full code.
 
 **Connects Everything:**
 - Registers assets, sensors, schedules, jobs
@@ -1092,14 +1090,14 @@ dagster dev -m dagster_ecommerce
 ```python
 @dbt_assets(
     manifest=MANIFEST_PATH,
-    project_dir=DBT_PROJECT_DIR  # ❌ Not supported
+    project_dir=DBT_PROJECT_DIR  #  Not supported
 )
 ```
 
 **After:**
 ```python
 @dbt_assets(
-    manifest=MANIFEST_PATH  # ✅ Correct
+    manifest=MANIFEST_PATH  #  Correct
 )
 ```
 
@@ -1799,21 +1797,21 @@ def upload_to_azure(df, folder, filename):
     )
     
     blob_client.upload_blob(csv_data, overwrite=True)
-    print(f"✅ Uploaded {blob_path} ({len(df)} rows)")
+    print(f" Uploaded {blob_path} ({len(df)} rows)")
 
 def main():
-    print("🔄 Generating e-commerce data...")
+    print(" Generating e-commerce data...")
     
     products_df = generate_products(50)
     customers_df = generate_customers(300)
     orders_df = generate_orders(customers_df, products_df, 1500)
     
-    print(f"\n📊 Data Summary:")
+    print(f"\n Data Summary:")
     print(f"  Products: {len(products_df)} rows")
     print(f"  Customers: {len(customers_df)} rows")
     print(f"  Orders: {len(orders_df)} rows")
     
-    print(f"\n⚠️  Intentional Data Quality Issues:")
+    print(f"\n  Intentional Data Quality Issues:")
     print(f"  Products with NULL category: {products_df['category'].isna().sum()}")
     print(f"  Products with NULL brand: {products_df['brand'].isna().sum()}")
     print(f"  Products with NULL cost: {products_df['cost'].isna().sum()}")
@@ -1827,12 +1825,12 @@ def main():
     future_orders = pd.to_datetime(orders_df['order_date']) > datetime.now()
     print(f"  Orders with future dates: {future_orders.sum()}")
     
-    print(f"\n☁️  Uploading to Azure Blob Storage...")
+    print(f"\n  Uploading to Azure Blob Storage...")
     upload_to_azure(products_df, 'products', 'products_20260322.csv')
     upload_to_azure(customers_df, 'customers', 'customers_20260322.csv')
     upload_to_azure(orders_df, 'orders', 'orders_20260322.csv')
     
-    print(f"\n✨ Data generation complete!")
+    print(f"\n Data generation complete!")
 
 if __name__ == "__main__":
     main()
@@ -2630,9 +2628,9 @@ def snowpipe_refresh(context: AssetExecutionContext, snowflake: SnowflakeResourc
         try:
             snowflake.execute_query(query)
             results.append({"pipe": pipe, "status": "success"})
-            context.log.info(f"✅ {pipe} refreshed")
+            context.log.info(f" {pipe} refreshed")
         except Exception as e:
-            context.log.error(f"❌ {pipe} failed: {str(e)}")
+            context.log.error(f" {pipe} failed: {str(e)}")
             results.append({"pipe": pipe, "status": "failed", "error": str(e)})
     
     return results
@@ -2728,7 +2726,7 @@ def alert_on_pipeline_failure(context: RunStatusSensorContext):
     """
     
     alert_message = f"""
-    🚨 *PIPELINE FAILURE ALERT* 🚨
+     *PIPELINE FAILURE ALERT* 
     
     *Run ID:* {context.dagster_run.run_id}
     *Job:* {context.dagster_run.job_name}
@@ -2799,7 +2797,7 @@ dbt_only_job = define_asset_job(
 
 ## End of Documentation
 
-**Project Status:** Parts 1-5 Complete ✅  
-**Next Steps:** Implement Parts 6-8 (Security, Testing, SCD Type 2)  
+**Project Status:** Complete   
+**Next Steps:** Implement Security, Testing, SCD Type 2
 **Version:** 1.0  
 **Last Updated:** March 22, 2026
