@@ -4,7 +4,6 @@
 **Stack:** Azure Blob Storage → Snowflake → dbt → Dagster  
 **Author:** King  
 **Date:** March 2026  
-**Status:** Parts 1-5 Complete | Parts 6-8 Planned
 
 ---
 
@@ -12,11 +11,11 @@
 
 1. [Project Overview]
 2. [Architecture]
-3. [Part 1: Infrastructure Setup]
-4. [Part 2: Data Generation & Upload]
-5. [Part 3: dbt Staging Layer]
-6. [Part 4: dbt Marts Layer]
-7. [Part 5: Dagster Orchestration]
+3. [Infrastructure Setup]
+4. [Data Generation & Upload]
+5. [dbt Staging Layer]
+6. [dbt Marts Layer]
+7. [Dagster Orchestration]
 8. [Future Improvements]
 9. [Lessons Learned]
 10. [Appendix A: Snowflake DDL Scripts]
