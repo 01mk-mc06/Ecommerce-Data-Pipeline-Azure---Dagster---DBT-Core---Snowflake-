@@ -2798,6 +2798,6 @@ dbt_only_job = define_asset_job(
 ## End of Documentation
 
 **Project Status:** Complete   
-**Next Steps:** Implement Security, Testing, SCD Type 2
+**Next Steps:** Implement Security, Testing, SCD Type 2, Comprehensive DBT Testing
 **Version:** 1.0  
 **Last Updated:** March 22, 2026
