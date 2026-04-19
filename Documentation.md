@@ -9,19 +9,19 @@
 
 ## Table of Contents
 
-1. [Project Overview]
-2. [Architecture]
-3. [Infrastructure Setup]
-4. [Data Generation & Upload]
-5. [dbt Staging Layer]
-6. [dbt Marts Layer]
-7. [Dagster Orchestration]
-8. [Future Improvements]
-9. [Lessons Learned]
-10. [Appendix A: Snowflake DDL Scripts]
-11. [Appendix B: Python Data Generator]
-12. [Appendix C: dbt Code]
-13. [Appendix D: Dagster Code]
+1. Project Overview
+2. Architecture
+3. Infrastructure Setup
+4. Data Generation & Upload
+5. dbt Staging Layer
+6. dbt Marts Layer
+7. Dagster Orchestration
+8. Future Improvements
+9. Lessons Learned
+10. Appendix A: Snowflake DDL Scripts
+11. Appendix B: Python Data Generator
+12. Appendix C: dbt Code
+13. Appendix D: Dagster Code
 
 ---
 
